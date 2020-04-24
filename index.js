@@ -30,12 +30,30 @@ app.get('/foodItems', (req, res) => {
       });
 })
 
+app.get('/foodItems/:key', (req, res) => {
+    const key = req.params.key;
+    client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
+        const collection = client.db("redOnion").collection("foodItems");
+        collection.find({key}).toArray((err, documents)=>{
+            if(err){
+                console.log(err)
+                res.status(500).send({message:err});
+            }
+            else{
+                res.send(documents[0]);
+            }
+        })
+        client.close();
+      });
+})
+
 app.post('/addFoodItems', (req, res) => {
     const foodItems = req.body;
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
         const collection = client.db("redOnion").collection("foodItems");
-        collection.insertOne({}, (err, result) => {
+        collection.insert(foodItems, (err, result) => {
             if(err){
                 console.log(err)
                 res.status(500).send({message:err});
