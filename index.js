@@ -48,7 +48,7 @@ app.get('/foodItems/:key', (req, res) => {
       });
 })
 
-app.post('/getProductsByKey', (req, res)=>{
+app.post('/getFoodItemsByKey', (req, res)=>{
     const key = req.params.key;
     const productKeys = req.body;
     console.log(productKeys);
